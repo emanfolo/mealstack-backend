@@ -13,9 +13,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html')
 
-app.get('/', (req, res) => {
+app.get('/', cors(), (req, res) => {
   res.render('index')
 })
 
 app.listen(process.env.PORT || 3000, 
 	() => console.log("Server is running..."));
+  
+/*
+let allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Headers', "*");
+    next();
+}
+app.use(allowCrossDomain);
+*/
