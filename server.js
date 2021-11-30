@@ -20,11 +20,4 @@ app.get('/', cors(), (req, res) => {
 app.listen(process.env.PORT || 3000, 
 	() => console.log("Server is running..."));
   
-/*
-let allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Headers', "*");
-    next();
-}
-app.use(allowCrossDomain);
-*/
+
