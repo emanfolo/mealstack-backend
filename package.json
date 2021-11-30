@@ -18,6 +18,7 @@
   "homepage": "https://github.com/emanfolo/mealstack-backend#readme",
   "dependencies": {
     "@prisma/client": "^3.6.0",
+    "axios": "^0.24.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
@@ -28,6 +29,7 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "prisma": "^3.6.0"
+    "prisma": "^3.6.0",
+    "nodemon": "^2.0.15"
   }
 }
