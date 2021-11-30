@@ -1,0 +1,19 @@
+{
+  "name": "mealstack-backend",
+  "version": "1.0.0",
+  "description": "### User Stories",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanfolo/mealstack-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emanfolo/mealstack-backend/issues"
+  },
+  "homepage": "https://github.com/emanfolo/mealstack-backend#readme"
+}
