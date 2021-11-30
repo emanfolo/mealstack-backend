@@ -8,44 +8,5 @@
 </head>
 <body>
   Hello world
-  <div id="api">
-
-  </div>
-
-
-  <div id="my_container" class="fatsecret_container"></div>
-
-  <script src="https://platform.fatsecret.com/js?key=adf07e19bd484386b0447496cefe7383"></script>
-
-  <script>
-    fatsecret.setContainer("my_container");
-    fatsecret.setCanvas("home");
-  </script>
-
-
-
-  <script >
-
-    async function sampleRequest(){
-      try{
-        const apiURL = "https://platform.fatsecret.com/rest/server.api?key=adf07e19bd484386b0447496cefe7383"
-        const res = await fetch(apiURL, {
-          method: 'recipe.get',
-          mode: 'cors',
-          recipe_id: '45647',
-          format: 'json', 
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        let testDiv = document.getElementById('api')
-        testDiv.innerHTML = res
-      } catch (err) {
-        console.log(err)
-      }
-    } 
-
-    sampleRequest()
-  </script>
 </body>
 </html>
