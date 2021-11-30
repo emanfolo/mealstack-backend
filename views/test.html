@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  Hello world
+
+  <button id="test">Fetch recipe</button>
+  <div id="recipe">
+ 
+  </div>
+  
+  <script>
+
+    const buttonEl = document.querySelector('#test');
+
+    buttonEl.addEventListener('click', () => {
+	const body = "45647"
+	fetchRecipe(body);
+    });
+
+    function fetchRecipe(body) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", 'https://platform.fatsecret.com/rest/server.api?');
+        xmlhttp.setRequestHeader("Authorization", `key=adf07e19bd484386b0447496cefe7383`);
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({"recipe_id": body}));
+        xmlhttp.onload = function () {
+        if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
+        var response = JSON.parse(xmlhttp.responseText)
+        document.getElementById("recipe").innerText = response;
+        } else {
+        document.getElementById("recipe").innerText = 'Error when creating peep. Try again' + xmlhttp.responseText
+        }
+    }
+    }
+  </script>
+  
+</body>
+</html>
