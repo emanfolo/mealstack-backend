@@ -13,7 +13,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html')
 
-app.get('/', cors(), (req, res) => {
+app.get('/', (req, res) => {
   res.render('index')
 })
 
