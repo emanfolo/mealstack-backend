@@ -36,6 +36,8 @@ app.get('/', cors(), (req, res) => {
       console.log(error)
     })
   }
+
+  res.render('index')
   
   
 
