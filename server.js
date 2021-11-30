@@ -29,15 +29,15 @@ app.get('/', cors(), (req, res) => {
       }
     })
     .then(function(response) {
+      res.json(response)
       console.log(response)
-      passedInObject = response
     })
     .catch(function(error) {
       console.log(error)
     })
   }
   
-  getRecipes()
+  
 
 })
 
