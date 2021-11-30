@@ -8,6 +8,9 @@
 </head>
 <body>
   Hello world
+  <div id="api">
+
+  </div>
   <script >
 
     async function sampleRequest(){
@@ -19,7 +22,8 @@
           format: 'json', 
           key: 'adf07e19bd484386b0447496cefe7383'
         })
-        console.log(res)
+        let testDiv = document.getElementById('api')
+        testDiv.innerHTML = res
       } catch (err) {
         console.log(err)
       }
