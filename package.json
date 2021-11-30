@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/emanfolo/mealstack-backend/issues"
   },
-  "homepage": "https://github.com/emanfolo/mealstack-backend#readme"
+  "homepage": "https://github.com/emanfolo/mealstack-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
