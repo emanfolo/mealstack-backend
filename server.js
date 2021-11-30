@@ -20,8 +20,6 @@ let authCode = 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjYwNzdBNzkyMERFNDM1NDQ5QkUxN
 
 app.get('/', cors(), (req, res) => {
 
-  let passedInObject = "passedInObject"
-
   async function getRecipes() {
     const apiURL = 'https://platform.fatsecret.com/rest/server.api?Content-Type=application/json&method=recipe.get&format=json&recipe_id=45647'
     
@@ -41,7 +39,6 @@ app.get('/', cors(), (req, res) => {
   
   getRecipes()
 
-  res.render('index', {responseObject: passedInObject})
 })
 
 app.listen(process.env.PORT || 3000, 
