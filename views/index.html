@@ -8,5 +8,23 @@
 </head>
 <body>
   Hello world
+  <script src="https://platform.fatsecret.com/js?key=adf07e19bd484386b0447496cefe7383" >
+
+    async function sampleRequest(){
+      try{
+        const apiURL = "https://platform.fatsecret.com/rest/server.api?"
+        const res = await fetch(apiURL, {
+          method: 'recipe.get',
+          recipe_id: '45647',
+          format: 'json', 
+          key: 'adf07e19bd484386b0447496cefe7383'
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    } 
+
+    sampleRequest()
+  </script>
 </body>
 </html>
