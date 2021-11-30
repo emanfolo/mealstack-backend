@@ -15,12 +15,15 @@
 
     async function sampleRequest(){
       try{
-        const apiURL = "https://platform.fatsecret.com/rest/server.api?"
+        const apiURL = "https://platform.fatsecret.com/rest/server.api?key=adf07e19bd484386b0447496cefe7383"
         const res = await fetch(apiURL, {
           method: 'recipe.get',
+          mode: 'cors',
           recipe_id: '45647',
           format: 'json', 
-          key: 'adf07e19bd484386b0447496cefe7383'
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
         let testDiv = document.getElementById('api')
         testDiv.innerHTML = res
