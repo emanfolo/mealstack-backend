@@ -5,9 +5,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//add below to env file
+//DATABASE_URL="postgres://bazaetrrlwsdpd:4df328c360b414b2bff2c1c62d98a23d791f95c87f3315bda289cce96e16bcfd@ec2-34-242-89-204.eu-west-1.compute.amazonaws.com:5432/deor13s3g2470b"
+//SHADOW_DATABASE_URL="postgres://nceqgnacsrgxsd:7b405df014f8e53358694065da448edb71433a5aed3b4ebf30527bd43155c565@ec2-54-195-76-73.eu-west-1.compute.amazonaws.com:5432/dah7300pr8dnft"
+//below is a site that allows you to view the cloud db hosted on heroku
+//https://heroku-data-explorer.herokuapp.com/
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Plan {
@@ -18,6 +25,11 @@ model Plan {
   protein   Int
   carbs     Int
   fat       Int
+  breakfast_id Int
+  lunch_id Int
+  dinner_id Int
+  snack_id Int
+  name String
   recipes   PlansOnRecipes[]
 }
 
