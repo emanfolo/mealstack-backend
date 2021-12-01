@@ -93,3 +93,17 @@ params {
 
 ```
 
+```
+Changing name of plan
+
+POST
+
+https://mealstack-backend.herokuapp.com/mealplan/edit
+
+params {
+  name: string, 
+  id: string
+}
+
+```
+

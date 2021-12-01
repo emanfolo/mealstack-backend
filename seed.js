@@ -406,10 +406,46 @@ let calories = 0
 let recipeArray = obj.recipes.recipe
 
 
-let highProteinRecipes = recipeArray.filter(x => x.recipe_nutrition.protein > 20)
+let highProteinRecipes = recipeArray.filter(x => x.recipe_nutrition.protein > 13)
+
+
+
+let arr = [
+
+    {
+        "calories": "183",
+        "carbohydrate": "11.02",
+        "fat": "12.71",
+        "protein": "5.95"
+    },
+
+    {
+        "calories": "396",
+        "carbohydrate": "52.04",
+        "fat": "20.67",
+        "protein": "9.29"
+    },
+
+    {
+        "calories": "198",
+        "carbohydrate": "32.77",
+        "fat": "3.31",
+        "protein": "13.82"
+    },
+
+    {
+        "calories": "730",
+                  "carbohydrate": "27.81",
+                  "fat": "61.76",
+                  "protein": "21.63"          
+    },
+
+
+
+        
+]
 
 let returnTotal = () => {
 
-  highProteinRecipes.forEach(x => {calories += x.recipe_nutrition.calories; protein += x.recipe_nutrition.protein; fat += x.recipe_nutrition.fat; carbs += x.recipe_nutrition.carbohydrates} )
-
+    arr.forEach(x => { calories += parseInt(x.calories); fat += parseInt(x.fat); carbs += parseInt(x.carbohydrate); protein += parseInt(x.protein) } )
 }

@@ -63,6 +63,23 @@ app.get('/plan/:id', cors(), async (req, res) => {
 
 })
 
+// Route for changing the name of a mealplan
+
+app.post('/mealplan/edit', async (req, res) =>{
+
+  const editedPlan = await prisma.plan.update({
+    where:{
+      id: parseInt(req.param('id')),
+    }, 
+    data: {
+      name: req.param('name'),
+    },
+  })
+
+  res.send(editedPlan)
+
+})
+
 // Creating a plan with params 
 
 app.post('/mealplan/new', cors(), async (req, res) => {
