@@ -25,3 +25,71 @@ So that I can remember all of my meal plans
 I want to save a plan and see it on my profile
 
 ```
+### API Documentation
+
+``` 
+Greeting page
+
+GET
+
+https://mealstack-backend.herokuapp.com/
+
+```
+
+```
+View all recipes
+
+GET
+
+https://mealstack-backend.herokuapp.com/recipes
+
+```
+
+```
+Viewing specific recipe
+
+GET 
+
+https://mealstack-backend.herokuapp.com/recipes/:id
+
+```
+
+```
+View all plans
+
+GET
+
+https://mealstack-backend.herokuapp.com/plans
+
+```
+
+```
+Viewing specific plan
+
+GET 
+
+https://mealstack-backend.herokuapp.com/plan/:id
+
+```
+
+```
+Creating a new mealplan 
+
+POST
+
+https://mealstack-backend.herokuapp.com/mealplan/new
+
+params {
+  calories: string,
+  protein: string,
+  carbs: string,
+  fat: string,
+  breakfast_id: string,
+  lunch_id: string,
+  dinner_id: string,
+  snack_id: string, 
+  name: string
+}
+
+```
+
