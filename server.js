@@ -45,7 +45,9 @@ app.get('/plans', cors(), async (req, res) => {
 
   const plans = await prisma.plan.findMany()
 
-  res.json(plans)
+  const plansAndMeals = [plans, importedData]
+
+  res.json(plansAndMeals)
 
 })
 
