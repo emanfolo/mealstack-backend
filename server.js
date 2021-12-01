@@ -30,6 +30,15 @@ app.get('/recipes', cors(), (req, res) => {
 
 })
 
+// Viewing specific recipe based on the id 
+
+app.get('/recipes/:id', cors(), (req, res) => {
+
+  let filteredRecipe = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('id'))
+
+  res.send(filteredRecipe)
+})
+
 // Viewing all created plans
 
 app.get('/plans', cors(), async (req, res) => {
@@ -57,13 +66,26 @@ app.get('/plan/:id', cors(), async (req, res) => {
 // Creating a plan with params 
 
 app.post('/mealplan/new', cors(), async (req, res) => {
+
+  //Future logic for finding recipes using the id's given and calculating macros & calories on backend
+
+  // let selectedBreakfast = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('breakfast_id'))
+  // let selectedLunch = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('lunch_id'))
+  // let selectedDinner = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('dinner_id'))
+  // let selectedSnack = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('snack_id'))
+
   
   const newPlan = await prisma.plan.create({
       data: {
         calories: parseInt(req.param('calories')),
         protein: parseInt(req.param('protein')),
         carbs: parseInt(req.param('carbs')), 
-        fat: parseInt(req.param('fat'))
+        fat: parseInt(req.param('fat')), 
+        breakfast_id: parseInt(req.param('breakfast_id')),
+        lunch_id: parseInt(req.param('lunch_id')),
+        dinner_id: parseInt(req.param('dinner_id')),
+        snack_id: parseInt(req.param('snack_id')),
+        name: req.param('name')
       }
     })
 
