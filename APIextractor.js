@@ -37,6 +37,11 @@ const formatTags = (tagsArray, cuisineType, mealType, dishType) => {
   return combinedTags.join(',');
 };
 
+const formatLabel = (label) => {
+  let newLabel = label.replace(/.recipe.*/gi, '');
+  return newLabel;
+};
+
 const apiExtractor = (data) => {
   let objectArray = [];
   data.hits.forEach((object) => {
@@ -57,7 +62,7 @@ const apiExtractor = (data) => {
     } = recipeObject;
 
     let newObject = {
-      label,
+      label: formatLabel(label),
       image_url: image,
       url,
       yield,
