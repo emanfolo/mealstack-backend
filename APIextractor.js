@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const formatIngredients = (ingredientObjectArray, yield) => {
   let ingredientArray = ingredientObjectArray.map((ingredient) => {
-    let singleServing = Math.floor((ingredient.weight / yield) * 100) / 100;
+    let singleServing = Math.ceil(ingredient.weight / yield);
     return `${singleServing}g ${ingredient.food}`;
   });
 
