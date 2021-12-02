@@ -12,7 +12,7 @@ app.use(express.static("public"))
 app.get('/', cors(), (req, res) => {
 
 
-  res.send("Welcome to mealstack API!")
+  res.send("Welcome to mealstack API! ")
 
 })
 
