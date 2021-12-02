@@ -26,13 +26,17 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "heroku": "^7.59.2",
+    "jest-mock-extended": "^2.0.4",
     "path": "^0.12.7"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.4.3",
     "nodemon": "^2.0.15",
-    "prisma": "^3.5.0"
+    "prisma": "^3.5.0",
+    "supertest": "^6.1.6"
   }
 }

@@ -3,18 +3,13 @@ const cors = require('cors')
 const app = express()
 
 
-app.use(cors())
-app.use(express.json())
-app.use(express.static("public"))
+// app.use(cors())
+// app.use(express.json())
+// app.use(express.static("public"))
 
-// Homepage 
+const welcomeRouter = require('./routes/welcome')
 
-app.get('/', cors(), (req, res) => {
-
-
-  res.send("Welcome to mealstack API! ")
-
-})
+app.use('/welcome', welcomeRouter)
 
 const planRouter = require('./routes/plans')
 

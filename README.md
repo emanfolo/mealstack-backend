@@ -58,7 +58,7 @@ Greeting page
 
 GET
 
-https://mealstack-backend.herokuapp.com/
+https://mealstack-backend.herokuapp.com/welcome
 
 ```
 
