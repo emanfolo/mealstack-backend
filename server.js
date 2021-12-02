@@ -21,9 +21,9 @@ const planRouter = require('./routes/plans')
 app.use('/plans', planRouter)
 
 
-const planRouter = require('./routes/plans')
+const recipeRouter = require('./routes/recipes')
 
-app.use('/plans', planRouter)
+app.use('/recipes', recipeRouter)
 
 app.listen(process.env.PORT || 3000, 
 	() => console.log("Server is running..."));
