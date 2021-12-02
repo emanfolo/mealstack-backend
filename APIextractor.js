@@ -1,8 +1,10 @@
 const data = require('./recipes');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const formatIngredients = (ingredientObjectArray, yield) => {
   let ingredientArray = ingredientObjectArray.map((ingredient) => {
-    let singleServing = Math.floor((ingredient.weight / yield) * 100) / 100;
+    let singleServing = Math.ceil(ingredient.weight / yield);
     return `${singleServing}g ${ingredient.food}`;
   });
 
@@ -35,7 +37,13 @@ const formatTags = (tagsArray, cuisineType, mealType, dishType) => {
   return combinedTags.join(',');
 };
 
+const formatLabel = (label) => {
+  let newLabel = label.replace(/.recipe.*/gi, '');
+  return newLabel;
+};
+
 const apiExtractor = (data) => {
+  let objectArray = [];
   data.hits.forEach((object) => {
     let recipeObject = object.recipe;
 
@@ -54,8 +62,8 @@ const apiExtractor = (data) => {
     } = recipeObject;
 
     let newObject = {
-      label,
-      image,
+      label: formatLabel(label),
+      image_url: image,
       url,
       yield,
       dairyFree: healthLabels.includes('Dairy-Free'),
@@ -77,8 +85,20 @@ const apiExtractor = (data) => {
       protein: Math.round(totalNutrients['PROCNT'].quantity / yield),
     };
 
-    console.log(newObject);
+    objectArray.push(newObject);
   });
+
+  return objectArray;
 };
 
-apiExtractor(data);
+let recipeObjects = apiExtractor(data);
+
+async function createRecipes() {
+  const Recipes = await prisma.recipe.createMany({
+    data: recipeObjects,
+    skipDuplicates: true,
+  });
+  console.log(Recipes);
+}
+
+createRecipes();
