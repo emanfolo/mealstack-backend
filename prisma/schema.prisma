@@ -25,41 +25,36 @@ model Plan {
   protein   Int
   carbs     Int
   fat       Int
-  breakfast_id Int
+  breakfast_id Int 
   lunch_id Int
   dinner_id Int
   snack_id Int
   name String
-  recipes   PlansOnRecipes[]
 }
 
 model Recipe {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String   @db.VarChar(255)
-  breakfast Boolean
-  lunch     Boolean
-  dinner    Boolean
-  calories  Int
-  protein   Int
-  carbs     Int
-  fat       Int
-  ingredients String
+  label String 
   image_url String
-  instructions_url String
-  Type      String
-  cuisine   String
-  plans     PlansOnRecipes[]
-}
-
-model PlansOnRecipes {
-  recipe       Recipe     @relation(fields: [recipeId], references: [id])
-  recipeId     Int // relation scalar field (used in the `@relation` attribute above)
-  plan         Plan @relation(fields: [planId], references: [id])
-  planId       Int // relation scalar field (used in the `@relation` attribute above)
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  @@id([recipeId, planId])
+  url String 
+  yield Int
+  dairyFree Boolean
+  glutenFree Boolean
+  peanutFree Boolean
+  porkFree Boolean
+  kosher Boolean
+  vegan Boolean
+  vegetarian Boolean
+  tags String 
+  ingredients String 
+  totalTime Int
+  cuisineType String ?
+  mealType String ?
+  dishType String ?
+  calories Int 
+  fat Int
+  carbs Int
+  protein Int 
 }
