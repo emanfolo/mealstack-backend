@@ -4,7 +4,9 @@
   "description": "### User Stories",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "dotenv -e .env.test jest -i",
+    "migrate:postgres-test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
+    "migrate:postgres-dev": "dotenv -e .env.development -- npx prisma migrate dev --name postgres-init"
   },
   "repository": {
     "type": "git",

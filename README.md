@@ -1,5 +1,9 @@
 ### Mealstack - Backend
 
+### Link to front-end 
+
+https://github.com/ConorButler/mealstack-frontend
+
 ### User Stories
 
 ```
@@ -25,6 +29,28 @@ So that I can remember all of my meal plans
 I want to save a plan and see it on my profile
 
 ```
+
+### Database set up
+
+```
+Set up a test database locally
+
+Create .env.test file at root directory and insert the below into the file replacing the variables in curly brackets {}
+
+DATABASE_URL="postgresql://{USERNAME}:{PASSWORD}@localhost:5432/{DBNAME}"
+
+Repeat the process by setting up a dev database and creating a .env.development file and inserting the DB URL.
+
+
+Scripts:
+
+Update Development DB
+npm run migrate:postgres-dev
+
+Update Test DB
+npm run migrate:postgres-test
+
+
 ### API Documentation
 
 ``` 
@@ -68,7 +94,7 @@ Viewing specific plan
 
 GET 
 
-https://mealstack-backend.herokuapp.com/plan/:id
+https://mealstack-backend.herokuapp.com/plans/:id
 
 ```
 
@@ -77,7 +103,7 @@ Creating a new mealplan
 
 POST
 
-https://mealstack-backend.herokuapp.com/mealplan/new
+https://mealstack-backend.herokuapp.com/plans/new
 
 params {
   calories: string,
@@ -98,7 +124,7 @@ Changing name of plan
 
 POST
 
-https://mealstack-backend.herokuapp.com/mealplan/edit
+https://mealstack-backend.herokuapp.com/plans/edit
 
 params {
   name: string, 
