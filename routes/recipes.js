@@ -3,13 +3,17 @@ const router = express.Router()
 
 const cors = require('cors')
 router.use(cors())
-const importedData = require("../data.json")
 
-// Viewing static JSON recipes object
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
+// Viewing all recipes from DB
 
 router.get('/', cors(), (req, res) => {
 
-  res.send(importedData)
+  const recipes = await prisma.recipe.findMany()
+
+  res.json(recipes)
 
 })
 
@@ -17,9 +21,13 @@ router.get('/', cors(), (req, res) => {
 
 router.get('/:id', cors(), (req, res) => {
 
-  let filteredRecipe = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('id'))
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id: parseInt(req.param('id')),
+    },
+  })
 
-  res.send(filteredRecipe)
+  res.json(recipe)
 })
 
 module.exports = router
