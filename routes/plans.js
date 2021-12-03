@@ -19,13 +19,68 @@ router.get('/', cors(), async (req, res) => {
   res.json(plans)
 })
 
+// Viewing plans by search criteria
+
+router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) => {
+
+  const plans = await prisma.plan.findMany({
+    include: { recipes: { include: { recipe: true } } },
+    where: {
+      AND: [
+        {
+          calories: {
+            gte: req.params.calories-50,
+          },
+        },
+        {
+          calories: {
+            lte: parseInt(req.params.calories)+50,
+          },
+        },
+        {
+          carbs: {
+            gte: req.params.carbs-10,
+          },
+        },
+        {
+          carbs: {
+            lte: parseInt(req.params.carbs)+10,
+          },
+        },
+        {
+          protein: {
+            gte: req.params.protein-10,
+          },
+        },
+        {
+          protein: {
+            lte: parseInt(req.params.protein)+10,
+          },
+        },
+        {
+          fat: {
+            gte: req.params.fats-10,
+          },
+        },
+        {
+          fat: {
+            lte: parseInt(req.params.fats)+10,
+          },
+        },
+      ],
+    },
+  })
+
+  res.json(plans)
+})
+
 // Viewing specific plan by id
 
 router.get('/:id', cors(), async (req, res) => {
 
   const plan = await prisma.plan.findUnique({
     where: {
-      id: parseInt(req.param('id')),
+      id: parseInt(req.params.id),
     },
   })
 
@@ -39,10 +94,10 @@ router.post('/edit', async (req, res) =>{
 
   const editedPlan = await prisma.plan.update({
     where:{
-      id: parseInt(req.param('id')),
+      id: parseInt(req.params.id),
     }, 
     data: {
-      name: req.param('name'),
+      name: req.params.name,
     },
   })
 
