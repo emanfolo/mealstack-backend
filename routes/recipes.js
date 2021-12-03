@@ -13,8 +13,6 @@ router.get('/', cors(), async (req, res) => {
 
   const recipes = await prisma.recipe.findMany()
 
-
-
   res.json(recipes)
 
 })
