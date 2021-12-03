@@ -3,7 +3,6 @@ const router = express.Router()
 
 const cors = require('cors')
 router.use(cors())
-const importedData = require("../data.json")
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
@@ -27,6 +26,7 @@ router.get('/:id', cors(), async (req, res) => {
     where: {
       id: parseInt(req.param('id')),
     },
+    include: { recipes: { include: { recipe: true } } },
   })
 
   res.json(plan)
@@ -46,7 +46,7 @@ router.post('/edit', async (req, res) =>{
     },
   })
 
-  res.send(editedPlan)
+  res.json(editedPlan)
 
 })
 
@@ -54,12 +54,7 @@ router.post('/edit', async (req, res) =>{
 
 router.post('/new', cors(), async (req, res) => {
 
-  //Future logic for finding recipes using the id's given and calculating macros & calories on backend
-
-  // let selectedBreakfast = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('breakfast_id'))
-  // let selectedLunch = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('lunch_id'))
-  // let selectedDinner = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('dinner_id'))
-  // let selectedSnack = importedData.recipes.recipe.filter( result => result.recipe_id == req.param('snack_id'))
+  //Will need to be rewritten using planadder.js when we decide to allow users to create their own plans
 
   
   const newPlan = await prisma.plan.create({
