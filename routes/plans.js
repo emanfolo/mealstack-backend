@@ -12,12 +12,11 @@ const prisma = new PrismaClient()
 
 router.get('/', cors(), async (req, res) => {
 
-  const plans = await prisma.plan.findMany()
+  const plans = await prisma.plan.findMany({
+    include: { recipes: { include: { recipe: true } } },
+  })
 
-  const plansAndMeals = [plans, importedData]
-
-  res.json(plansAndMeals)
-
+  res.json(plans)
 })
 
 // Viewing specific plan by id

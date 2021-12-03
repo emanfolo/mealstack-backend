@@ -25,11 +25,12 @@ model Plan {
   protein   Int
   carbs     Int
   fat       Int
-  breakfast_id Int 
-  lunch_id Int
-  dinner_id Int
-  snack_id Int
+  // breakfast_id Int 
+  // lunch_id Int
+  // dinner_id Int
+  // snack_id Int
   name String
+  recipes RecipesOnPlans[]
 }
 
 model Recipe {
@@ -57,6 +58,16 @@ model Recipe {
   fat Int
   carbs Int
   protein Int
+  plans RecipesOnPlans[]
 
   @@unique([url])
+}
+
+model RecipesOnPlans {
+  plan       Plan     @relation(fields: [planId], references: [id])
+  planId     Int // relation scalar field (used in the `@relation` attribute above)
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@id([planId, recipeId])
 }
