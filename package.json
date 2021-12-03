@@ -6,7 +6,8 @@
   "scripts": {
     "test": "dotenv -e .env.test jest -i",
     "migrate:postgres-test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
-    "migrate:postgres-dev": "dotenv -e .env.development -- npx prisma migrate dev --name postgres-init"
+    "migrate:postgres-dev": "dotenv -e .env.development -- npx prisma migrate dev --name postgres-init",
+    "migrate:postgres-prod": "dotenv - .env -- npx prisma migrate --name postgres-init"
   },
   "repository": {
     "type": "git",
