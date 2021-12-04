@@ -19,10 +19,6 @@ model Plan {
   protein   Int
   carbs     Int
   fat       Int
-  // breakfast_id Int 
-  // lunch_id Int
-  // dinner_id Int
-  // snack_id Int
   name String
   recipes RecipesOnPlans[]
 }
