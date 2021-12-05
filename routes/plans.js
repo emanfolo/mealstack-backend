@@ -18,6 +18,17 @@ router.get('/', cors(), async (req, res) => {
   res.json(plans)
 })
 
+// Viewing all plans
+
+router.get('/search', cors(), async (req, res) => {
+
+  const plans = await prisma.plan.findMany({
+    include: { recipes: { include: { recipe: true } } },
+  })
+
+  res.json(plans)
+})
+
 // Viewing plans by search criteria
 
 router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) => {
@@ -25,48 +36,22 @@ router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) =
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
-      AND: [
-        {
-          calories: {
-            gte: req.params.calories-50,
-          },
-        },
-        {
-          calories: {
-            lte: parseInt(req.params.calories)+50,
-          },
-        },
-        {
-          carbs: {
-            gte: req.params.carbs-10,
-          },
-        },
-        {
-          carbs: {
-            lte: parseInt(req.params.carbs)+10,
-          },
-        },
-        {
-          protein: {
-            gte: req.params.protein-10,
-          },
-        },
-        {
-          protein: {
-            lte: parseInt(req.params.protein)+10,
-          },
-        },
-        {
-          fat: {
-            gte: req.params.fats-10,
-          },
-        },
-        {
-          fat: {
-            lte: parseInt(req.params.fats)+10,
-          },
-        },
-      ],
+      calories: {
+        gte: req.params.calories-50,
+        lte: parseInt(req.params.calories)+50,
+      },
+      carbs: {
+        gte: req.params.carbs-10,
+        lte: parseInt(req.params.carbs)+10,
+      },
+      protein: {
+        gte: req.params.protein-10,
+        lte: parseInt(req.params.protein)+10,
+      },
+      fat: {
+        gte: req.params.fats-10,
+        lte: parseInt(req.params.fats)+10,
+      },  
     },
   })
 
