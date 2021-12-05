@@ -4,6 +4,7 @@
   "description": "### User Stories",
   "main": "index.js",
   "scripts": {
+    "start": "dotenv -e .env.development node server.js",
     "test": "dotenv -e .env.test jest -i",
     "migrate:postgres-test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
     "migrate:postgres-dev": "dotenv -e .env.development -- npx prisma migrate dev --name postgres-init",
