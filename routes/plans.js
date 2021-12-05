@@ -5,11 +5,23 @@ const cors = require('cors')
 router.use(cors())
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const PlanAdder = require('../PlanAdder')
 
 
 // Viewing all created plans
 
 router.get('/', cors(), async (req, res) => {
+
+  const plans = await prisma.plan.findMany({
+    include: { recipes: { include: { recipe: true } } },
+  })
+
+  res.json(plans)
+})
+
+// Viewing all plans
+
+router.get('/search', cors(), async (req, res) => {
 
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
@@ -25,48 +37,22 @@ router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) =
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
-      AND: [
-        {
-          calories: {
-            gte: req.params.calories-50,
-          },
-        },
-        {
-          calories: {
-            lte: parseInt(req.params.calories)+50,
-          },
-        },
-        {
-          carbs: {
-            gte: req.params.carbs-10,
-          },
-        },
-        {
-          carbs: {
-            lte: parseInt(req.params.carbs)+10,
-          },
-        },
-        {
-          protein: {
-            gte: req.params.protein-10,
-          },
-        },
-        {
-          protein: {
-            lte: parseInt(req.params.protein)+10,
-          },
-        },
-        {
-          fat: {
-            gte: req.params.fats-10,
-          },
-        },
-        {
-          fat: {
-            lte: parseInt(req.params.fats)+10,
-          },
-        },
-      ],
+      calories: {
+        gte: req.params.calories-50,
+        lte: parseInt(req.params.calories)+50,
+      },
+      carbs: {
+        gte: req.params.carbs-10,
+        lte: parseInt(req.params.carbs)+10,
+      },
+      protein: {
+        gte: req.params.protein-10,
+        lte: parseInt(req.params.protein)+10,
+      },
+      fat: {
+        gte: req.params.fats-10,
+        lte: parseInt(req.params.fats)+10,
+      },  
     },
   })
 
@@ -144,57 +130,40 @@ router.get('/new/custom', cors(), async (req, res) => {
   //fetch 3 meals that have params/3 give or take 10%
   const recipes = await prisma.recipe.findMany({
     where: {
-      AND: [
-        {
-          calories: {
-            gte: parseInt(singleMealCalories * .9),
-          },
-        },
-        {
-          calories: {
-            lte: parseInt(singleMealCalories * 1.1),
-          },
-        },
-        {
-          carbs: {
-            gte: parseInt(singleMealCarbs * .9),
-          },
-        },
-        {
-          carbs: {
-            lte: parseInt(singleMealCarbs * 1.1),
-          },
-        },
-        {
-          protein: {
-            gte: parseInt(singleMealProtein * .9),
-          },
-        },
-        {
-          protein: {
-            lte: parseInt(singleMealProtein * 1.1),
-          },
-        },
-        {
-          fat: {
-            gte: parseInt(singleMealFat * .9),
-          },
-        },
-        {
-          fat: {
-            lte: parseInt(singleMealFat * 1.1),
-          },
-        },
-      ],
+      calories: {
+        gte: parseInt(singleMealCalories * .9),
+        lte: parseInt(singleMealCalories * 1.1),
+      },
+      carbs: {
+        gte: parseInt(singleMealCarbs * .9),
+        lte: parseInt(singleMealCarbs * 1.1),
+      },
+      protein: {
+        gte: parseInt(singleMealProtein * .9),
+        lte: parseInt(singleMealProtein * 1.1),
+      },
+      fat: {
+        gte: parseInt(singleMealFat * .9),
+        lte: parseInt(singleMealFat * 1.1),
+      },
     },
   })
 
-  const randomRecipe = (recipes) => {
-    return recipes[Math.floor(Math.random() * recipes.length)].id
+  const recipeArray = [];
+
+  const randomRecipeAdder = (recipes) => {
+    let randNum = Math.floor(Math.random() * recipes.length);
+    recipeArray.push(recipes[randNum].id);
+    recipes.splice(randNum, 1);
   }
 
-  const recipeArray = [randomRecipe(recipes), randomRecipe(recipes), randomRecipe(recipes)];
+  for (let i = 0; i < 3; i++){
+    randomRecipeAdder(recipes);
+}
+  
   console.log(recipeArray);
+
+  PlanAdder.createPlan('Custom Plan', recipeArray);
 
   
   // const newPlan = await prisma.plan.create({
