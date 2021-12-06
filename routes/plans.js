@@ -38,20 +38,20 @@ router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) =
     include: { recipes: { include: { recipe: true } } },
     where: {
       calories: {
-        gte: req.params.calories * .9,
-        lte: parseInt(req.params.calories) * 1.1,
+        gte: parseInt(req.params.calories * .9),
+        lte: parseInt(req.params.calories * 1.1),
       },
       carbs: {
-        gte: req.params.carbs * .8,
-        lte: parseInt(req.params.carbs) * 1.2,
+        gte: parseInt(req.params.carbs * .8),
+        lte: parseInt(req.params.carbs * 1.2),
       },
       protein: {
-        gte: req.params.protein * .8,
-        lte: parseInt(req.params.protein) * 1.2,
+        gte: parseInt(req.params.protein * .8),
+        lte: parseInt(req.params.protein * 1.2),
       },
       fat: {
-        gte: req.params.fats * .8,
-        lte: parseInt(req.params.fats) * 1.2,
+        gte: parseInt(req.params.fats * .8),
+        lte: parseInt(req.params.fats * 1.2),
       },
     },
   })
