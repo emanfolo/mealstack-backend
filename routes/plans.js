@@ -70,6 +70,7 @@ router.get('/:id', cors(), async (req, res) => {
     include: { recipes: { include: { recipe: true } } },
   })
 
+  res.set('Access-Control-Allow-Origin:', '*')
   res.json(plan)
 
 })
