@@ -3,6 +3,10 @@ const router = express.Router()
 
 const cors = require('cors')
 router.use(cors())
+const bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -28,6 +32,22 @@ router.get('/:id', cors(), async (req, res) => {
   })
 
   res.json(recipe)
+})
+
+router.post('/filter', cors(), async (req, res) => {
+
+  const filteredRecipes = await prisma.recipe.findMany({
+    where: {
+      label: {
+        contains: req.body.label,
+      },
+    },
+    take: 20
+  })
+
+
+  res.json(filteredRecipes)
+
 })
 
 module.exports = router
