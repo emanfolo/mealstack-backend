@@ -12,7 +12,6 @@ async function getRecipeData(array) {
 }
 
 async function createPlanObject(planName, array) {
-  let planArray = []
   let recipes = await getRecipeData(array);
   
   const getTotalCalories = recipes[0].calories + recipes[1].calories + recipes[2].calories;
@@ -63,4 +62,4 @@ async function createPlan(planName, array) {
   })
 }
 
-createPlan('Another Plan Name', [7,8,9]);
+module.exports = { createPlan };
