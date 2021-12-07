@@ -29,7 +29,7 @@ app.use(
       checkPeriod: 604800, // 1 week
     }),
     resave: false,
-    secret: 'secretcode',
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     proxy: true,
     cookie: {
