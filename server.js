@@ -100,10 +100,10 @@ app.get(
 app.get(
   '/auth/github/callback',
   passport.authenticate('github', {
-    failureRedirect: `${FRONTEND_URL}/login`,
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
   }),
   function (req, res) {
-    res.redirect(`${FRONTEND_URL}/login/success`);
+    res.redirect(`${process.env.FRONTEND_URL}/login/success`);
   }
 );
 
