@@ -2,11 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
-// routes
+
 const welcomeRouter = require('./routes/welcome');
 const planRouter = require('./routes/plans');
 const recipeRouter = require('./routes/recipes');
@@ -14,6 +15,8 @@ const recipeRouter = require('./routes/recipes');
 // db connection
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+
+
 
 const app = express();
 
@@ -29,6 +32,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use('/welcome', welcomeRouter);
 app.use('/plans', planRouter);
@@ -118,3 +123,7 @@ app.post('/logout', (req, res) => {
     res.sendStatus(401);
   }
 });
+
+app.get('/', (req, res) => {
+  res.redirect('/welcome')
+})
