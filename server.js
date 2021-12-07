@@ -131,3 +131,15 @@ app.post('/logout', (req, res) => {
 app.get('/', (req, res) => {
   res.redirect('/welcome');
 });
+
+// getting all of a users plans
+router.get('/user/:id/plans', cors(), async (req, res) => {
+  const plans = await prisma.user.findMany({
+    include: { plans: { include: { plan: true } } },
+    where: {
+      userId: parseInt(req.params.id),
+    },
+  });
+
+  res.json(plans);
+});

@@ -77,10 +77,12 @@ model User {
 }
 
 model PlansOnUsers {
-  user       User    @relation(fields: [userId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
   userId     Int
-  plan       Plan    @relation(fields: [planId], references: [id])
+  plan       Plan       @relation(fields: [planId], references: [id])
   planId     Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
   @@id([userId, planId])
 }
