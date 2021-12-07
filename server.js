@@ -9,6 +9,10 @@ const welcomeRouter = require('./routes/welcome');
 const planRouter = require('./routes/plans');
 const recipeRouter = require('./routes/recipes');
 
+// db connection
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
 const app = express();
 
 // middleware
@@ -34,12 +38,12 @@ app.listen(process.env.PORT || port, () =>
 );
 
 passport.serializeUser((user, done) => {
-  // to be fixed
+  /* can't just store the id because it throws an error
+  only fixable with typescript */
   return done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
-  // to be fixed
   return done(null, user);
 });
 
@@ -51,15 +55,31 @@ passport.use(
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: '/auth/github/callback',
     },
-    function (accessToken, refreshToken, profile, done) {
-      // User.findOrCreate({ githubId: profile.id }, function (err, user) {
-      //   return done(err, user);
-      // });
-      console.log(
-        'sucessfully authentiated with github:',
-        console.log(profile)
-      );
-      done(null, profile);
+    async (accessToken, refreshToken, profile, done) => {
+      // find or create the user
+      const databaseUser = await prisma.user
+        .upsert({
+          where: {
+            githubId: profile.id,
+          },
+          update: {
+            username: profile.username,
+            image: profile._json.avatar_url,
+          },
+          create: {
+            githubId: profile.id,
+            username: profile.username,
+            image: profile._json.avatar_url,
+          },
+        })
+        .catch((error) => {
+          console.log('Error in github auth: ', error);
+          done(error, null);
+        });
+
+      if (databaseUser) {
+        return done(null, databaseUser);
+      }
     }
   )
 );
@@ -71,13 +91,26 @@ app.get(
 
 app.get(
   '/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
+  passport.authenticate('github', {
+    failureRedirect: 'http://localhost:3000/login',
+  }),
   function (req, res) {
-    res.redirect('/');
+    res.redirect('http://localhost:3000');
   }
 );
 
 // getting the current user
 app.get('/user', (req, res) => {
+  console.log('/user --- req.user: ', req.user);
   res.send(req.user);
+});
+
+app.post('/logout', (req, res) => {
+  if (req.user) {
+    console.log('logging out');
+    req.logout();
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(401);
+  }
 });

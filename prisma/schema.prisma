@@ -61,3 +61,15 @@ model RecipesOnPlans {
 
   @@id([planId, recipeId])
 }
+
+model User {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  username  String ?
+  password  String ?
+  image     String ?
+  githubId  String ?
+
+  @@unique([githubId])
+}
