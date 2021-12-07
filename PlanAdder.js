@@ -59,7 +59,9 @@ async function createPlanObject(planName, array) {
 async function createPlan(planName, array) {
   const createPlan = await prisma.plan.create({
     data: await createPlanObject(planName, array),
+    include: { recipes: { include: { recipe: true } } }
   })
+  return createPlan;
 }
 
 module.exports = { createPlan };

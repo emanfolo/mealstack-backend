@@ -6,6 +6,8 @@ router.use(cors())
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
+const { any } = require('jest-mock-extended')
+const originUrl = 'https://mealstack.netlify.app'
 
 
 // Viewing all created plans
@@ -117,7 +119,7 @@ router.post('/new', cors(), async (req, res) => {
 })
 
 router.post('/new/custom/', cors(), async (req, res) => {
-  const singleMealCalories = req.body.calories / 3;
+  const singleMealCalories = parseInt(req.body.calories) / 3;
   const singleMealCarbs = req.body.carbs/3;
   const singleMealProtein = req.body.protein/3;
   const singleMealFat = req.body.fat / 3;
@@ -130,30 +132,36 @@ router.post('/new/custom/', cors(), async (req, res) => {
         lte: parseInt(singleMealCalories * 1.1),
       },
       carbs: {
-        gte: parseInt(singleMealCarbs * .75),
-        lte: parseInt(singleMealCarbs * 1.25),
+        gte: parseInt(singleMealCarbs * .5),
+        lte: parseInt(singleMealCarbs * 1.5),
       },
       protein: {
-        gte: parseInt(singleMealProtein * .75),
-        lte: parseInt(singleMealProtein * 1.25),
+        gte: parseInt(singleMealProtein * .5),
+        lte: parseInt(singleMealProtein * 1.5),
       },
       fat: {
-        gte: parseInt(singleMealFat * .75),
-        lte: parseInt(singleMealFat * 1.25),
+        gte: parseInt(singleMealFat * .5),
+        lte: parseInt(singleMealFat * 1.5),
       },
     },
   })
 
-  for (let i = 0; i < 3; i++){
-    let randNum = Math.floor(Math.random() * recipes.length);
-    recipeArray.push(recipes[randNum].id);
-    recipes.splice(randNum, 1);
+  let responseBody = null;
+
+  if (recipes.length > 2) {
+    for (let i = 0; i < 3; i++){
+      let randNum = Math.floor(Math.random() * recipes.length);
+      recipeArray.push(recipes[randNum].id);
+      recipes.splice(randNum, 1);
+    }
+    const newPlan = PlanAdder.createPlan('Custom Plan', recipeArray);
+    responseBody = await newPlan;
   }
 
-  const newPlan = PlanAdder.createPlan('Custom Plan', recipeArray);
-
-  res.set('Access-Control-Allow-Origin:', '*')
-  res.json(newPlan);
+  res.set('Access-Control-Allow-Origin', originUrl)
+  res.send({
+    body: await responseBody
+  });
 })
 
 module.exports = router
