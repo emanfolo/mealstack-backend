@@ -59,7 +59,20 @@ passport.serializeUser((userid, done) => {
 });
 
 passport.deserializeUser((userid, done) => {
-  return done(null, userid);
+  const userObject = await prisma.user
+    .findUnique({
+      where: {
+        id: userid,
+      },
+    })
+    .catch((error) => {
+      console.log('Error in deserialize: ', error);
+      done(error, null);
+    });
+
+  if (userObject) {
+    return done(null, userObject);
+  }
 });
 
 // GitHub sign in
