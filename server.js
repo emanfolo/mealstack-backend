@@ -9,6 +9,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 // app.use(express.static("public"))
 
+app.get('/', cors(), (req, res) => {
+
+  res.redirect('/welcome')
+
+})
+
 const welcomeRouter = require('./routes/welcome')
 
 app.use('/welcome', welcomeRouter)
