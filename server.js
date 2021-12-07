@@ -95,7 +95,7 @@ app.get(
     failureRedirect: 'http://localhost:3000/login',
   }),
   function (req, res) {
-    res.redirect('http://localhost:3000');
+    res.redirect('http://localhost:3000/login/success');
   }
 );
 
