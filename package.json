@@ -4,9 +4,8 @@
   "description": "Backend for the Mealstack app",
   "main": "index.js",
   "scripts": {
-    "migrate:postgres-dev": "npx prisma migrate dev --name postgres-init",
-    "migrate:postgres-test": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init",
-    "migrate:postgres-prod": "dotenv -e .env.production npx prisma migrate --name postgres-init"
+    "migrate:postgres-dev": "npx prisma migrate dev",
+    "migrate:postgres-test": "dotenv -e .env.test -- npx prisma migrate dev"
   },
   "repository": {
     "type": "git",
