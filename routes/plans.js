@@ -157,11 +157,8 @@ router.post('/new/custom/', cors(), async (req, res) => {
     responseBody = await newPlan;
   }
 
-  res.set('Access-Control-Allow-Origin', 'http://localhost:3006')
+  res.set('Access-Control-Allow-Origin', ['http://localhost:3006','https://mealstack.netlify.app'])
   res.send({
-    headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3006'
-    },
     body: await responseBody
   });
 })
