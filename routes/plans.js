@@ -7,6 +7,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
 const { any } = require('jest-mock-extended')
+const originUrl = 'https://mealstack.netlify.app'
 
 
 // Viewing all created plans
@@ -157,7 +158,7 @@ router.post('/new/custom/', cors(), async (req, res) => {
     responseBody = await newPlan;
   }
 
-  res.set('Access-Control-Allow-Origin', ['http://localhost:3006','https://mealstack.netlify.app'])
+  res.set('Access-Control-Allow-Origin', originUrl)
   res.send({
     body: await responseBody
   });
