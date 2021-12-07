@@ -21,44 +21,40 @@ router.get('/', cors(), async (req, res) => {
   res.json(plans)
 })
 
-// Viewing all plans
-
-router.get('/search', cors(), async (req, res) => {
-
-  const plans = await prisma.plan.findMany({
-    include: { recipes: { include: { recipe: true } } },
-  })
-
-  res.json(plans)
-})
-
 // Viewing plans by search criteria
 
-router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) => {
+router.post('/search', cors(), async (req, res) => {
+  const calories = req.body.calories;
+  const carbs = req.body.carbs;
+  const protein = req.body.protein;
+  const fat = req.body.fat;
 
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
       calories: {
-        gte: parseInt(req.params.calories * .9),
-        lte: parseInt(req.params.calories * 1.1),
+        gte: calories ? parseInt(calories * .9) : calories,
+        lte: calories ? parseInt(calories * 1.1) : calories,
       },
       carbs: {
-        gte: parseInt(req.params.carbs * .8),
-        lte: parseInt(req.params.carbs * 1.2),
+        gte: carbs ? parseInt(carbs * .9) : carbs,
+        lte: carbs ? parseInt(carbs * 1.2) : carbs,
       },
       protein: {
-        gte: parseInt(req.params.protein * .8),
-        lte: parseInt(req.params.protein * 1.2),
+        gte: protein ? parseInt(protein * .9) : protein,
+        lte: protein ? parseInt(protein * 1.2) : protein,
       },
       fat: {
-        gte: parseInt(req.params.fats * .8),
-        lte: parseInt(req.params.fats * 1.2),
+        gte: fat ? parseInt(fat * .9) : fat,
+        lte: fat ? parseInt(fat * 1.2) : fat,
       },
     },
   })
 
-  res.json(plans)
+  res.set('Access-Control-Allow-Origin', originUrl)
+  res.send({
+    body: await plans
+  });
 })
 
 // Viewing specific plan by id
@@ -119,7 +115,7 @@ router.post('/new', cors(), async (req, res) => {
 })
 
 router.post('/new/custom/', cors(), async (req, res) => {
-  const singleMealCalories = parseInt(req.body.calories) / 3;
+  const singleMealCalories = req.body.calories / 3;
   const singleMealCarbs = req.body.carbs/3;
   const singleMealProtein = req.body.protein/3;
   const singleMealFat = req.body.fat / 3;
