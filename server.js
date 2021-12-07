@@ -52,27 +52,14 @@ app.listen(process.env.PORT || port, () =>
   console.log(`Server is running on port ${port}...`)
 );
 
-passport.serializeUser((userid, done) => {
+passport.serializeUser((user, done) => {
   /* can't just store the id because it throws an error
   only fixable with typescript */
-  return done(null, userid);
+  return done(null, user);
 });
 
-passport.deserializeUser((userid, done) => {
-  const userObject = prisma.user
-    .findUnique({
-      where: {
-        id: userid,
-      },
-    })
-    .catch((error) => {
-      console.log('Error in deserialize: ', error);
-      done(error, null);
-    });
-
-  if (userObject) {
-    return done(null, userObject);
-  }
+passport.deserializeUser((user, done) => {
+  return done(null, user);
 });
 
 // GitHub sign in
@@ -107,7 +94,7 @@ passport.use(
         });
 
       if (databaseUser) {
-        return done(null, databaseUser.id);
+        return done(null, databaseUser);
       }
     }
   )
