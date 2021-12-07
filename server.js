@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
@@ -17,7 +19,7 @@ const app = express();
 
 // middleware
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(
   session({
     secret: 'secretcode',
@@ -92,10 +94,10 @@ app.get(
 app.get(
   '/auth/github/callback',
   passport.authenticate('github', {
-    failureRedirect: 'http://localhost:3000/login',
+    failureRedirect: `${FRONTEND_URL}/login`,
   }),
   function (req, res) {
-    res.redirect('http://localhost:3000/login/success');
+    res.redirect(`${FRONTEND_URL}/login/success`);
   }
 );
 
