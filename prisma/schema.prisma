@@ -21,6 +21,7 @@ model Plan {
   fat       Int
   name String
   recipes RecipesOnPlans[]
+  users PlansOnUsers[]
 }
 
 model Recipe {
@@ -70,6 +71,16 @@ model User {
   password  String ?
   image     String ?
   githubId  String ?
+  plans PlansOnUsers[]
 
   @@unique([githubId])
+}
+
+model PlansOnUsers {
+  user       User    @relation(fields: [userId], references: [id])
+  userId     Int
+  plan       Plan    @relation(fields: [planId], references: [id])
+  planId     Int
+
+  @@id([userId, planId])
 }
