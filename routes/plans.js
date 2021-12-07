@@ -5,6 +5,9 @@ const cors = require('cors')
 router.use(cors())
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const PlanAdder = require('../PlanAdder')
+const { any } = require('jest-mock-extended')
+const originUrl = 'https://mealstack.netlify.app'
 
 
 // Viewing all created plans
@@ -20,57 +23,38 @@ router.get('/', cors(), async (req, res) => {
 
 // Viewing plans by search criteria
 
-router.get('/search/:calories&:carbs&:protein&:fats', cors(), async (req, res) => {
+router.post('/search', cors(), async (req, res) => {
+  const calories = req.body.calories;
+  const carbs = req.body.carbs;
+  const protein = req.body.protein;
+  const fat = req.body.fat;
 
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
-      AND: [
-        {
-          calories: {
-            gte: req.params.calories-50,
-          },
-        },
-        {
-          calories: {
-            lte: parseInt(req.params.calories)+50,
-          },
-        },
-        {
-          carbs: {
-            gte: req.params.carbs-10,
-          },
-        },
-        {
-          carbs: {
-            lte: parseInt(req.params.carbs)+10,
-          },
-        },
-        {
-          protein: {
-            gte: req.params.protein-10,
-          },
-        },
-        {
-          protein: {
-            lte: parseInt(req.params.protein)+10,
-          },
-        },
-        {
-          fat: {
-            gte: req.params.fats-10,
-          },
-        },
-        {
-          fat: {
-            lte: parseInt(req.params.fats)+10,
-          },
-        },
-      ],
+      calories: {
+        gte: calories ? parseInt(calories * .9) : calories,
+        lte: calories ? parseInt(calories * 1.1) : calories,
+      },
+      carbs: {
+        gte: carbs ? parseInt(carbs * .9) : carbs,
+        lte: carbs ? parseInt(carbs * 1.2) : carbs,
+      },
+      protein: {
+        gte: protein ? parseInt(protein * .9) : protein,
+        lte: protein ? parseInt(protein * 1.2) : protein,
+      },
+      fat: {
+        gte: fat ? parseInt(fat * .9) : fat,
+        lte: fat ? parseInt(fat * 1.2) : fat,
+      },
     },
   })
 
-  res.json(plans)
+  res.set('Access-Control-Allow-Origin', originUrl)
+  res.send({
+    body: await plans
+  });
 })
 
 // Viewing specific plan by id
@@ -130,89 +114,50 @@ router.post('/new', cors(), async (req, res) => {
 
 })
 
-router.get('/new/custom', cors(), async (req, res) => {
-  const singleMealCalories = 1000;
-  const singleMealCarbs = 50;
-  const singleMealProtein = 83;
-  const singleMealFat = 60;
+router.post('/new/custom/', cors(), async (req, res) => {
+  const singleMealCalories = req.body.calories / 3;
+  const singleMealCarbs = req.body.carbs/3;
+  const singleMealProtein = req.body.protein/3;
+  const singleMealFat = req.body.fat / 3;
+  const recipeArray = [];
 
-  // const singleMealCalories = req.params.calories/3;
-  // const singleMealCarbs = req.params.carbs/3;
-  // const singleMealProtein = req.params.protein/3;
-  // const singleMealFat = req.params.fats/3;
-
-  //fetch 3 meals that have params/3 give or take 10%
   const recipes = await prisma.recipe.findMany({
     where: {
-      AND: [
-        {
-          calories: {
-            gte: parseInt(singleMealCalories * .9),
-          },
-        },
-        {
-          calories: {
-            lte: parseInt(singleMealCalories * 1.1),
-          },
-        },
-        {
-          carbs: {
-            gte: parseInt(singleMealCarbs * .9),
-          },
-        },
-        {
-          carbs: {
-            lte: parseInt(singleMealCarbs * 1.1),
-          },
-        },
-        {
-          protein: {
-            gte: parseInt(singleMealProtein * .9),
-          },
-        },
-        {
-          protein: {
-            lte: parseInt(singleMealProtein * 1.1),
-          },
-        },
-        {
-          fat: {
-            gte: parseInt(singleMealFat * .9),
-          },
-        },
-        {
-          fat: {
-            lte: parseInt(singleMealFat * 1.1),
-          },
-        },
-      ],
+      calories: {
+        gte: parseInt(singleMealCalories * .9),
+        lte: parseInt(singleMealCalories * 1.1),
+      },
+      carbs: {
+        gte: parseInt(singleMealCarbs * .5),
+        lte: parseInt(singleMealCarbs * 1.5),
+      },
+      protein: {
+        gte: parseInt(singleMealProtein * .5),
+        lte: parseInt(singleMealProtein * 1.5),
+      },
+      fat: {
+        gte: parseInt(singleMealFat * .5),
+        lte: parseInt(singleMealFat * 1.5),
+      },
     },
   })
 
-  const randomRecipe = (recipes) => {
-    return recipes[Math.floor(Math.random() * recipes.length)].id
+  let responseBody = null;
+
+  if (recipes.length > 2) {
+    for (let i = 0; i < 3; i++){
+      let randNum = Math.floor(Math.random() * recipes.length);
+      recipeArray.push(recipes[randNum].id);
+      recipes.splice(randNum, 1);
+    }
+    const newPlan = PlanAdder.createPlan('Custom Plan', recipeArray);
+    responseBody = await newPlan;
   }
 
-  const recipeArray = [randomRecipe(recipes), randomRecipe(recipes), randomRecipe(recipes)];
-  console.log(recipeArray);
-
-  
-  // const newPlan = await prisma.plan.create({
-  //     data: {
-  //       calories: parseInt(req.param('calories')),
-  //       protein: parseInt(req.param('protein')),
-  //       carbs: parseInt(req.param('carbs')), 
-  //       fat: parseInt(req.param('fat')), 
-  //       breakfast_id: parseInt(req.param('breakfast_id')),
-  //       lunch_id: parseInt(req.param('lunch_id')),
-  //       dinner_id: parseInt(req.param('dinner_id')),
-  //       snack_id: parseInt(req.param('snack_id')),
-  //       name: req.param('name')
-  //     }
-  //   })
-
-  res.json(recipes)
-
+  res.set('Access-Control-Allow-Origin', originUrl)
+  res.send({
+    body: await responseBody
+  });
 })
 
 module.exports = router

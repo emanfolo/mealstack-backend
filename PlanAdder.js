@@ -12,7 +12,6 @@ async function getRecipeData(array) {
 }
 
 async function createPlanObject(planName, array) {
-  let planArray = []
   let recipes = await getRecipeData(array);
   
   const getTotalCalories = recipes[0].calories + recipes[1].calories + recipes[2].calories;
@@ -60,7 +59,9 @@ async function createPlanObject(planName, array) {
 async function createPlan(planName, array) {
   const createPlan = await prisma.plan.create({
     data: await createPlanObject(planName, array),
+    include: { recipes: { include: { recipe: true } } }
   })
+  return createPlan;
 }
 
-createPlan('Another Plan Name', [7,8,9]);
+module.exports = { createPlan };
