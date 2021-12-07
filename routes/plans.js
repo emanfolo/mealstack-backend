@@ -145,21 +145,24 @@ router.post('/new/custom/', cors(), async (req, res) => {
     },
   })
 
+  let responseBody = null;
 
-  for (let i = 0; i < 3; i++){
-    let randNum = Math.floor(Math.random() * recipes.length);
-    recipeArray.push(recipes[randNum].id);
-    recipes.splice(randNum, 1);
+  if (recipes.length > 2) {
+    for (let i = 0; i < 3; i++){
+      let randNum = Math.floor(Math.random() * recipes.length);
+      recipeArray.push(recipes[randNum].id);
+      recipes.splice(randNum, 1);
+    }
+    const newPlan = PlanAdder.createPlan('Custom Plan', recipeArray);
+    responseBody = await newPlan;
   }
-
-  const newPlan = PlanAdder.createPlan('Custom Plan', recipeArray);
 
   res.set('Access-Control-Allow-Origin', 'http://localhost:3006')
   res.send({
     headers: {
       'Access-Control-Allow-Origin': 'http://localhost:3006'
     },
-    body: await newPlan
+    body: await responseBody
   });
 })
 
