@@ -52,14 +52,14 @@ app.listen(process.env.PORT || port, () =>
   console.log(`Server is running on port ${port}...`)
 );
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((userid, done) => {
   /* can't just store the id because it throws an error
   only fixable with typescript */
-  return done(null, user);
+  return done(null, userid);
 });
 
-passport.deserializeUser((user, done) => {
-  return done(null, user);
+passport.deserializeUser((userid, done) => {
+  return done(null, userid);
 });
 
 // GitHub sign in
@@ -94,7 +94,7 @@ passport.use(
         });
 
       if (databaseUser) {
-        return done(null, databaseUser);
+        return done(null, databaseUser.id);
       }
     }
   )
