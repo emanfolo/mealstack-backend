@@ -102,14 +102,18 @@ app.get(
 // getting the current user
 app.get('/user', (req, res) => {
   console.log('/user --- req.user: ', req.user);
-  res.send(req.user);
+  if (req.user) {
+    res.send(req.user);
+  } else {
+    res.send({ status: 401, logged_in: false });
+  }
 });
 
 app.post('/logout', (req, res) => {
   if (req.user) {
     console.log('logging out');
     req.logout();
-    res.sendStatus(200);
+    res.send({ status: 200, logged_out: true });
   } else {
     res.sendStatus(401);
   }
