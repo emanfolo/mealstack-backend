@@ -25,6 +25,11 @@ app.use(
     secret: 'secretcode',
     resave: true,
     saveUninitialized: true,
+    proxy: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+    },
   })
 );
 app.use(passport.initialize());
