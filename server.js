@@ -4,7 +4,6 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-const MemoryStore = require('memorystore')(session);
 const bodyParser = require('body-parser');
 
 const passport = require('passport');
@@ -25,11 +24,11 @@ app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(
   session({
-    store: new MemoryStore({
-      checkPeriod: 604800, // 1 week
+    store: new (require('connect-pg-simple')(session))({
+      createTableIfMissing: true,
     }),
-    resave: false,
     secret: process.env.SESSION_SECRET,
+    resave: false,
     saveUninitialized: false,
     proxy: true,
     cookie: {
