@@ -40,6 +40,7 @@ router.post('/filter', cors(), async (req, res) => {
     where: {
       label: {
         contains: req.body.label,
+        mode: 'insensitive',
       },
     },
     take: 20
