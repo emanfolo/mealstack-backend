@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 const bodyParser = require('body-parser');
 
 const passport = require('passport');
@@ -24,13 +25,17 @@ app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(
   session({
-    secret: 'secretcode',
-    resave: true,
-    saveUninitialized: true,
+    store: new MemoryStore({
+      checkPeriod: 604800, // 1 week
+    }),
+    resave: false,
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
     proxy: true,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
+      maxAge: 604800,
     },
   })
 );

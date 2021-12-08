@@ -7,7 +7,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
 const { any } = require('jest-mock-extended')
-const originUrl = 'https://mealstack.netlify.app'
+const originUrl = '*'
 
 
 // Viewing all created plans
@@ -93,24 +93,9 @@ router.post('/edit', async (req, res) =>{
 
 router.post('/new', cors(), async (req, res) => {
 
-  //Will need to be rewritten using planadder.js when we decide to allow users to create their own plans
-
-  
-  const newPlan = await prisma.plan.create({
-      data: {
-        calories: parseInt(req.param('calories')),
-        protein: parseInt(req.param('protein')),
-        carbs: parseInt(req.param('carbs')), 
-        fat: parseInt(req.param('fat')), 
-        breakfast_id: parseInt(req.param('breakfast_id')),
-        lunch_id: parseInt(req.param('lunch_id')),
-        dinner_id: parseInt(req.param('dinner_id')),
-        snack_id: parseInt(req.param('snack_id')),
-        name: req.param('name')
-      }
-    })
-
-  res.json(newPlan)
+  const createdPlan = PlanAdder.createPlan(req.body.label, [parseInt(req.body.first), parseInt(req.body.second), parseInt(req.body.third)])
+  const response = await createdPlan
+  res.json(response)
 
 })
 
