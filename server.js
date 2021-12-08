@@ -139,12 +139,14 @@ app.get('/', (req, res) => {
 
 // getting all of a users plans
 app.get('/user/:id/plans', async (req, res) => {
-  const plans = await prisma.user.findMany({
-    include: { plans: { include: { plan: true } } },
-    where: {
-      userId: parseInt(req.params.id),
-    },
-  });
+  const plans = await prisma.user
+    .findUnique({
+      include: { plans: { include: { plan: true } } },
+      where: {
+        id: parseInt(req.params.id),
+      },
+    })
+    .catch((err) => console.log(err));
 
   res.json(plans);
 });
