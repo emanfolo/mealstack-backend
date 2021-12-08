@@ -7,7 +7,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
 const { any } = require('jest-mock-extended')
-const originUrl = '*'
+const originUrl = 'https://mealstack.netlify.app'
 
 
 // Viewing all created plans
@@ -24,10 +24,18 @@ router.get('/', cors(), async (req, res) => {
 // Viewing plans by search criteria
 
 router.post('/search', cors(), async (req, res) => {
-  const calories = req.body.calories;
-  const carbs = req.body.carbs;
-  const protein = req.body.protein;
-  const fat = req.body.fat;
+  const data = req.body;
+  const calories = data.calories;
+  const carbs = data.carbs;
+  const protein = data.protein;
+  const fat = data.fat;
+  const dairyFree = data.dairyFree;
+  const glutenFree = data.glutenFree;
+  const kosher = data.kosher;
+  const peanutFree = data.peanutFree;
+  const porkFree = data.porkFree;
+  const vegan = data.vegan;
+  const vegetarian = data.vegetarian;
 
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
@@ -47,6 +55,27 @@ router.post('/search', cors(), async (req, res) => {
       fat: {
         gte: fat ? parseInt(fat * .9) : fat,
         lte: fat ? parseInt(fat * 1.2) : fat,
+      },
+      dairyFree: {
+        equals: dairyFree ? true : undefined,
+      },
+      glutenFree: {
+        equals: glutenFree ? true : undefined,
+      },
+      kosher: {
+        equals: kosher ? true : undefined,
+      },
+      peanutFree: {
+        equals: peanutFree ? true : undefined,
+      },
+      porkFree: {
+        equals: porkFree ? true : undefined,
+      },
+      vegan: {
+        equals: vegan ? true : undefined,
+      },
+      vegatarian: {
+        equals: vegetarian ? true : undefined,
       },
     },
   })
