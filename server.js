@@ -28,7 +28,9 @@ app.use(
       createTableIfMissing: true,
       conObject: {
         connectionString: process.env.DATABASE_URL,
-        ssl: true,
+        ssl: {
+          rejectUnauthorized: true,
+        },
       },
     }),
     secret: process.env.SESSION_SECRET,
