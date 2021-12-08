@@ -68,7 +68,6 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   username  String ?
-  password  String ?
   image     String ?
   githubId  String ?
   plans PlansOnUsers[]
