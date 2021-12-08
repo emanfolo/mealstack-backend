@@ -56,27 +56,31 @@ router.post('/search', cors(), async (req, res) => {
         gte: fat ? parseInt(fat * .9) : fat,
         lte: fat ? parseInt(fat * 1.2) : fat,
       },
-      dairyFree: {
-        equals: dairyFree ? true : undefined,
-      },
-      glutenFree: {
-        equals: glutenFree ? true : undefined,
-      },
-      kosher: {
-        equals: kosher ? true : undefined,
-      },
-      peanutFree: {
-        equals: peanutFree ? true : undefined,
-      },
-      porkFree: {
-        equals: porkFree ? true : undefined,
-      },
-      vegan: {
-        equals: vegan ? true : undefined,
-      },
-      vegatarian: {
-        equals: vegetarian ? true : undefined,
-      },
+      recipe: {
+        every: {
+          dairyFree: {
+              equals: dairyFree ? true : undefined,
+            },
+            glutenFree: {
+              equals: glutenFree ? true : undefined,
+            },
+            kosher: {
+              equals: kosher ? true : undefined,
+            },
+            peanutFree: {
+              equals: peanutFree ? true : undefined,
+            },
+            porkFree: {
+              equals: porkFree ? true : undefined,
+            },
+            vegan: {
+              equals: vegan ? true : undefined,
+            },
+            vegetarian: {
+              equals: vegetarian ? true : undefined,
+            },
+        }
+      }
     },
   })
 
