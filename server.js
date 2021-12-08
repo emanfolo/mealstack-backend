@@ -55,7 +55,7 @@ app.listen(process.env.PORT || port, () =>
 passport.serializeUser((user, done) => {
   /* can't just store the id because it throws an error
   only fixable with typescript */
-  return done(null, user);
+  return done(null, user.id);
 });
 
 passport.deserializeUser((user, done) => {
@@ -138,7 +138,7 @@ app.get('/', (req, res) => {
 });
 
 // getting all of a users plans
-router.get('/user/:id/plans', cors(), async (req, res) => {
+app.get('/user/:id/plans', async (req, res) => {
   const plans = await prisma.user.findMany({
     include: { plans: { include: { plan: true } } },
     where: {
@@ -147,4 +147,19 @@ router.get('/user/:id/plans', cors(), async (req, res) => {
   });
 
   res.json(plans);
+});
+
+app.post('/user/plans/:planid', async (req, res) => {
+  console.log(req.body);
+  const savedPlan = await prisma.plansOnUsers
+    .create({
+      data: {
+        userId: parseInt(req.body.userid),
+        planId: parseInt(req.params.planid),
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.json(savedPlan);
 });
