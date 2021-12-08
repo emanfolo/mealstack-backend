@@ -152,7 +152,6 @@ app.get('/user/:id/plans', async (req, res) => {
 });
 
 app.post('/user/plans/:planid', async (req, res) => {
-  console.log(req.body);
   const savedPlan = await prisma.plansOnUsers
     .create({
       data: {
