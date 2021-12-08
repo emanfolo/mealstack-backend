@@ -37,48 +37,52 @@ router.post('/search', cors(), async (req, res) => {
   const vegan = data.vegan;
   const vegetarian = data.vegetarian;
 
+  const isSearchable = (macro) => {
+    return macro && macro != '' ? true : false
+  }
+
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
       calories: {
-        gte: calories ? parseInt(calories * .9) : calories,
-        lte: calories ? parseInt(calories * 1.1) : calories,
+        gte: isSearchable(calories) ? parseInt(calories * .9) : undefined,
+        lte: isSearchable(calories) ? parseInt(calories * 1.1) : undefined,
       },
       carbs: {
-        gte: carbs ? parseInt(carbs * .9) : carbs,
-        lte: carbs ? parseInt(carbs * 1.2) : carbs,
+        gte: isSearchable(carbs) ? parseInt(carbs * .9) : carbs,
+        lte: isSearchable(carbs) ? parseInt(carbs * 1.2) : carbs,
       },
       protein: {
-        gte: protein ? parseInt(protein * .9) : protein,
-        lte: protein ? parseInt(protein * 1.2) : protein,
+        gte: isSearchable(protein) ? parseInt(protein * .9) : protein,
+        lte: isSearchable(protein) ? parseInt(protein * 1.2) : protein,
       },
       fat: {
-        gte: fat ? parseInt(fat * .9) : fat,
-        lte: fat ? parseInt(fat * 1.2) : fat,
+        gte: isSearchable(fat) ? parseInt(fat * .9) : fat,
+        lte: isSearchable(fat) ? parseInt(fat * 1.2) : fat,
       },
       recipes: {
         every: {
           recipe: {
             dairyFree: {
-              equals: dairyFree ? true : undefined,
+              equals: isSearchable(dairyFree) ? true : undefined,
             },
             glutenFree: {
-              equals: glutenFree ? true : undefined,
+              equals: isSearchable(glutenFree) ? true : undefined,
             },
             kosher: {
-              equals: kosher ? true : undefined,
+              equals: isSearchable(kosher) ? true : undefined,
             },
             peanutFree: {
-              equals: peanutFree ? true : undefined,
+              equals: isSearchable(peanutFree) ? true : undefined,
             },
             porkFree: {
-              equals: porkFree ? true : undefined,
+              equals: isSearchable(porkFree) ? true : undefined,
             },
             vegan: {
-              equals: vegan ? true : undefined,
+              equals: isSearchable(vegan) ? true : undefined,
             },
             vegetarian: {
-              equals: vegetarian ? true : undefined,
+              equals: isSearchable(vegetarian) ? true : undefined,
             },
           }
         }
