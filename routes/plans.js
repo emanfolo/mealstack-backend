@@ -49,16 +49,16 @@ router.post('/search', cors(), async (req, res) => {
         lte: isSearchable(calories) ? parseInt(calories * 1.1) : undefined,
       },
       carbs: {
-        gte: isSearchable(carbs) ? parseInt(carbs * .9) : carbs,
-        lte: isSearchable(carbs) ? parseInt(carbs * 1.2) : carbs,
+        gte: isSearchable(carbs) ? parseInt(carbs * .9) : undefined,
+        lte: isSearchable(carbs) ? parseInt(carbs * 1.2) : undefined,
       },
       protein: {
-        gte: isSearchable(protein) ? parseInt(protein * .9) : protein,
-        lte: isSearchable(protein) ? parseInt(protein * 1.2) : protein,
+        gte: isSearchable(protein) ? parseInt(protein * .9) : undefined,
+        lte: isSearchable(protein) ? parseInt(protein * 1.2) : undefined,
       },
       fat: {
-        gte: isSearchable(fat) ? parseInt(fat * .9) : fat,
-        lte: isSearchable(fat) ? parseInt(fat * 1.2) : fat,
+        gte: isSearchable(fat) ? parseInt(fat * .9) : undefined,
+        lte: isSearchable(fat) ? parseInt(fat * 1.2) : undefined,
       },
       recipes: {
         every: {
