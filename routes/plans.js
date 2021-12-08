@@ -7,7 +7,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
 const { any } = require('jest-mock-extended')
-const originUrl = 'https://mealstack.netlify.app'
+const originUrl = '*'
 
 
 // Viewing all created plans
