@@ -38,9 +38,9 @@ router.post('/search', cors(), async (req, res) => {
   const vegetarian = data.vegetarian;
 
   const isSearchable = (macro) => {
-    return macro && macro != '' ? true : false
+    return (macro && macro != 'false' && macro != '')
   }
-
+  console.log(isSearchable(vegetarian));
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
