@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const cors = require('cors')
-router.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
+router.use(cors())
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const PlanAdder = require('../PlanAdder')
@@ -58,7 +58,8 @@ router.post('/search', cors(), async (req, res) => {
       },
       recipes: {
         every: {
-          dairyFree: {
+          recipe: {
+            dairyFree: {
               equals: dairyFree ? true : undefined,
             },
             glutenFree: {
@@ -79,6 +80,7 @@ router.post('/search', cors(), async (req, res) => {
             vegetarian: {
               equals: vegetarian ? true : undefined,
             },
+          }
         }
       }
     },
