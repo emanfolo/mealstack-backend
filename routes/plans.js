@@ -56,7 +56,7 @@ router.post('/search', cors(), async (req, res) => {
         gte: fat ? parseInt(fat * .9) : fat,
         lte: fat ? parseInt(fat * 1.2) : fat,
       },
-      recipe: {
+      recipes: {
         every: {
           dairyFree: {
               equals: dairyFree ? true : undefined,
