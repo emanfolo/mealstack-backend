@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-const MemoryStore = require('memorystore')(session);
+// const MemoryStore = require('memorystore')(session);
 const bodyParser = require('body-parser');
 
 const passport = require('passport');
@@ -25,9 +25,6 @@ app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(
   session({
-    store: new MemoryStore({
-      checkPeriod: 604800, // 1 week
-    }),
     resave: false,
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
@@ -151,6 +148,7 @@ app.get('/user/:id/plans', async (req, res) => {
   res.json(plans);
 });
 
+// not restful but too late to change
 app.post('/user/plans/:planid', async (req, res) => {
   const savedPlan = await prisma.plansOnUsers
     .create({
@@ -163,4 +161,20 @@ app.post('/user/plans/:planid', async (req, res) => {
       console.log(err);
     });
   res.json(savedPlan);
+});
+
+app.delete('/user/plans/:planid', async (req, res) => {
+  const deletedPlan = await prisma.plansOnUsers
+    .delete({
+      where: {
+        userId_planId: {
+          userId: parseInt(req.body.userid),
+          planId: parseInt(req.params.planid),
+        },
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.json(deletedPlan);
 });
