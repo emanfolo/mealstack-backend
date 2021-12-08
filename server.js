@@ -40,7 +40,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 604800,
+      maxAge: 604800000,
     },
   })
 );
