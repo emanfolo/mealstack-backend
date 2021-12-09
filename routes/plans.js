@@ -24,30 +24,69 @@ router.get('/', cors(), async (req, res) => {
 // Viewing plans by search criteria
 
 router.post('/search', cors(), async (req, res) => {
-  const calories = req.body.calories;
-  const carbs = req.body.carbs;
-  const protein = req.body.protein;
-  const fat = req.body.fat;
+  const data = req.body;
+  const calories = data.calories;
+  const carbs = data.carbs;
+  const protein = data.protein;
+  const fat = data.fat;
+  const dairyFree = data.dairyFree;
+  const glutenFree = data.glutenFree;
+  const kosher = data.kosher;
+  const peanutFree = data.peanutFree;
+  const porkFree = data.porkFree;
+  const vegan = data.vegan;
+  const vegetarian = data.vegetarian;
 
+  const isSearchable = (macro) => {
+    return (macro && macro != 'false' && macro != '')
+  }
+  console.log(isSearchable(vegetarian));
   const plans = await prisma.plan.findMany({
     include: { recipes: { include: { recipe: true } } },
     where: {
       calories: {
-        gte: calories ? parseInt(calories * .9) : calories,
-        lte: calories ? parseInt(calories * 1.1) : calories,
+        gte: isSearchable(calories) ? parseInt(calories * .9) : undefined,
+        lte: isSearchable(calories) ? parseInt(calories * 1.1) : undefined,
       },
       carbs: {
-        gte: carbs ? parseInt(carbs * .9) : carbs,
-        lte: carbs ? parseInt(carbs * 1.2) : carbs,
+        gte: isSearchable(carbs) ? parseInt(carbs * .9) : undefined,
+        lte: isSearchable(carbs) ? parseInt(carbs * 1.2) : undefined,
       },
       protein: {
-        gte: protein ? parseInt(protein * .9) : protein,
-        lte: protein ? parseInt(protein * 1.2) : protein,
+        gte: isSearchable(protein) ? parseInt(protein * .9) : undefined,
+        lte: isSearchable(protein) ? parseInt(protein * 1.2) : undefined,
       },
       fat: {
-        gte: fat ? parseInt(fat * .9) : fat,
-        lte: fat ? parseInt(fat * 1.2) : fat,
+        gte: isSearchable(fat) ? parseInt(fat * .9) : undefined,
+        lte: isSearchable(fat) ? parseInt(fat * 1.2) : undefined,
       },
+      recipes: {
+        every: {
+          recipe: {
+            dairyFree: {
+              equals: isSearchable(dairyFree) ? true : undefined,
+            },
+            glutenFree: {
+              equals: isSearchable(glutenFree) ? true : undefined,
+            },
+            kosher: {
+              equals: isSearchable(kosher) ? true : undefined,
+            },
+            peanutFree: {
+              equals: isSearchable(peanutFree) ? true : undefined,
+            },
+            porkFree: {
+              equals: isSearchable(porkFree) ? true : undefined,
+            },
+            vegan: {
+              equals: isSearchable(vegan) ? true : undefined,
+            },
+            vegetarian: {
+              equals: isSearchable(vegetarian) ? true : undefined,
+            },
+          }
+        }
+      }
     },
   })
 
