@@ -40,7 +40,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 604800000,
+      maxAge: 2629800000, // 1 month
     },
   })
 );
@@ -60,7 +60,7 @@ app.listen(process.env.PORT || port, () =>
 passport.serializeUser((user, done) => {
   /* can't just store the id because it throws an error
   only fixable with typescript */
-  return done(null, user);
+  return done(null, user.id);
 });
 
 passport.deserializeUser((user, done) => {
@@ -140,4 +140,49 @@ app.post('/logout', (req, res) => {
 
 app.get('/', (req, res) => {
   res.redirect('/welcome');
+});
+
+// getting all of a users plans
+app.get('/user/:id/plans', async (req, res) => {
+  const plans = await prisma.plansOnUsers
+    .findMany({
+      include: {
+        plan: { include: { recipes: { include: { recipe: true } } } },
+      },
+      where: { userId: parseInt(req.params.id) },
+    })
+    .catch((err) => console.log(err));
+
+  res.json(plans);
+});
+
+// not restful but too late to change
+app.post('/user/plans/:planid', async (req, res) => {
+  const savedPlan = await prisma.plansOnUsers
+    .create({
+      data: {
+        userId: parseInt(req.body.userid),
+        planId: parseInt(req.params.planid),
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.json(savedPlan);
+});
+
+app.delete('/user/plans/:planid', async (req, res) => {
+  const deletedPlan = await prisma.plansOnUsers
+    .delete({
+      where: {
+        userId_planId: {
+          userId: parseInt(req.body.userid),
+          planId: parseInt(req.params.planid),
+        },
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.json(deletedPlan);
 });
