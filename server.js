@@ -64,7 +64,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (userid, done) => {
-  console.log('userid ----------', userid);
   console.log(typeof userid);
   const userObject = await prisma.user
     .findUnique({
@@ -78,7 +77,6 @@ passport.deserializeUser(async (userid, done) => {
     });
 
   if (userObject) {
-    console.log('userObject --------', userObject);
     return done(null, userObject);
   }
 });
@@ -139,6 +137,7 @@ app.get(
 // getting the current user
 app.get('/user', (req, res) => {
   if (req.user) {
+    console.log('req.user.id', req.user.id);
     res.send({ user: req.user, logged_in: true });
   } else {
     res.send({ logged_in: false });
