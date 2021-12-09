@@ -68,7 +68,7 @@ passport.deserializeUser((userid, done) => {
   const userObject = prisma.user
     .findUnique({
       where: {
-        id: userid,
+        id: parseInt(userid),
       },
     })
     .catch((err) => {
