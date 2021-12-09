@@ -1,87 +1,76 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Plan {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int              @id @default(autoincrement())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
   calories  Int
   protein   Int
   carbs     Int
   fat       Int
-  name String
-  recipes RecipesOnPlans[]
-  users PlansOnUsers[]
+  name      String
+  recipes   RecipesOnPlans[]
 }
 
 model Recipe {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  label String 
-  image_url String
-  url String 
-  yield Int
-  dairyFree Boolean
-  glutenFree Boolean
-  peanutFree Boolean
-  porkFree Boolean
-  kosher Boolean
-  vegan Boolean
-  vegetarian Boolean
-  tags String 
-  ingredients String 
-  totalTime Int
-  cuisineType String ?
-  mealType String ?
-  dishType String ?
-  calories Int 
-  fat Int
-  carbs Int
-  protein Int
-  plans RecipesOnPlans[]
-
-  @@unique([url])
+  id          Int              @id @default(autoincrement())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  calories    Int
+  protein     Int
+  carbs       Int
+  fat         Int
+  ingredients String
+  image_url   String
+  cuisineType String?
+  dairyFree   Boolean
+  dishType    String?
+  glutenFree  Boolean
+  kosher      Boolean
+  label       String
+  mealType    String?
+  peanutFree  Boolean
+  porkFree    Boolean
+  tags        String
+  totalTime   Int
+  url         String           @unique
+  vegan       Boolean
+  vegetarian  Boolean
+  yield       Int
+  plans       RecipesOnPlans[]
 }
 
 model RecipesOnPlans {
-  plan       Plan     @relation(fields: [planId], references: [id])
-  planId     Int // relation scalar field (used in the `@relation` attribute above)
+  planId   Int
+  recipeId Int
+  plan     Plan   @relation(fields: [planId], references: [id])
   recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId Int // relation scalar field (used in the `@relation` attribute above)
 
   @@id([planId, recipeId])
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  username  String ?
-  image     String ?
-  githubId  String ?
-  plans PlansOnUsers[]
-
-  @@unique([githubId])
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  username  String?
+  password  String?
+  githubId  String?  @unique
+  image     String?
 }
 
-model PlansOnUsers {
-  user       User       @relation(fields: [userId], references: [id])
-  userId     Int
-  plan       Plan       @relation(fields: [planId], references: [id])
-  planId     Int
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
 
-  @@id([userId, planId])
+  @@index([expire], map: "IDX_session_expire")
 }
