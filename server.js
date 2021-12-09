@@ -65,6 +65,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((userid, done) => {
   console.log('userid ----------', userid);
+  console.log(typeof userid);
   const userObject = prisma.user
     .findUnique({
       where: {
@@ -75,6 +76,8 @@ passport.deserializeUser((userid, done) => {
       console.log(err);
       done(err, null);
     });
+
+  console.log('userObject --------', userObject);
   return done(null, userObject);
 });
 
