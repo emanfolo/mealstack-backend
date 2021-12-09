@@ -63,11 +63,11 @@ passport.serializeUser((user, done) => {
   return done(null, user.id);
 });
 
-passport.deserializeUser((userid, done) => {
+passport.deserializeUser((user, done) => {
   const userObject = prisma.user
     .findUnique({
       where: {
-        id: userid,
+        id: user.id,
       },
     })
     .catch((err) => {
