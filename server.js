@@ -58,13 +58,11 @@ app.listen(process.env.PORT || port, () =>
 );
 
 passport.serializeUser((user, done) => {
-  /* can't just store the id because it throws an error
-  only fixable with typescript */
+  // best practice to only store user id in session
   return done(null, user.id);
 });
 
 passport.deserializeUser(async (userid, done) => {
-  console.log(typeof userid);
   const userObject = await prisma.user
     .findUnique({
       where: {
@@ -137,7 +135,6 @@ app.get(
 // getting the current user
 app.get('/user', (req, res) => {
   if (req.user) {
-    console.log('req.user.id', req.user.id);
     res.send({ user: req.user, logged_in: true });
   } else {
     res.send({ logged_in: false });
